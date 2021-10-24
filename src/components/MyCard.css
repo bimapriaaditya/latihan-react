@@ -1,0 +1,47 @@
+body{
+    background: slategray;
+    padding: 50px 0;
+}
+
+.strait{
+    font-family: 'Strait', sans-serif;
+}
+
+.space-up-100{
+    height: 100px;
+}
+
+.latihan .header-content h1{
+    font-family: 'Strait', sans-serif;
+}
+
+.latihan .header-content h1{
+    letter-spacing: 4px;
+}
+.latihan .header-content h3{
+    letter-spacing: 1px;
+    transform: translateY(-15px);
+}
+
+.latihan .card{
+    border: 0 !important;
+    border-radius: 0 !important;
+    transition: 0.4s;
+    cursor: pointer;
+    padding: 0;
+    margin: 15px 0;
+}
+.latihan .card:hover{
+    filter: brightness(0.97);
+}
+
+.latihan .card img{
+    border-radius: 0 !important;
+    height: 350px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.latihan .btn-outline-danger{
+    border-radius: 50px !important;
+}
