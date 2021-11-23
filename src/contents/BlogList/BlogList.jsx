@@ -39,25 +39,23 @@ class BlogList extends Component
     })
     .then(response => response.json())
     .then(json => {
-      this.setState({
-        post: this.state.post.filter(post => post.id !== id)
-      });
+      this.getApi();
     });
   }
 
   // function get input value
   getInputValue = (e) => {
+
+    let postFormNew = {...this.state.postForm};
     
-    let {postForm} = this.state;
-    
-    postForm[e.target.name] = e.target.value;
+    postFormNew[e.target.name] = e.target.value;
 
     if(this.state.statusForm === 'create') {
-      postForm.id = Date.now();
+      postFormNew.id = Date.now();
     }
 
     this.setState({
-      postForm
+      postForm: postFormNew
     });
 
   }
@@ -96,13 +94,9 @@ class BlogList extends Component
     })
     .then(response => response.json())
     .then(json => {
-      this.setState({
-        post: [...this.state.post, json],
-        statusForm: 'create',
-      });
+      this.emptyForm();
+      this.getApi();
     });
-    this.emptyForm();
-    this.getApi();
   }
 
   // function PUT API
@@ -124,8 +118,14 @@ class BlogList extends Component
       },
       body: JSON.stringify(postForm)
     })
-    .then(response => response.json());
-    this.emptyForm();
+    .then(response => response.json())
+    .then(json => {
+      this.emptyForm();
+      this.getApi();
+      this.setState({
+        statusForm: 'create'
+      });
+    });
   }
 
   
@@ -172,7 +172,7 @@ class BlogList extends Component
 
         {/* modal */}
         <div className="modal fade" id="modalCreate">
-          <div className="modal-dialog opacity-5" role="document">
+          <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">Create Item</h5>

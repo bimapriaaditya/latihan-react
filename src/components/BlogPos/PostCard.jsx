@@ -5,7 +5,7 @@ const PostCard = (props) => {
     <div className="col-6 mt-4">
       <div className="card">
         <div className="position-relative">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80" className="card-img-top" />
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80" className="card-img-top" alt="lorem" />
           <div className="my-action">
             <div className="dropdown">
               <button className="btn text-light shadow-none rounded-circle" type="button" data-toggle="dropdown" aria-expanded="false">
