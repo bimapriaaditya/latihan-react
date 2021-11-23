@@ -46,3 +46,11 @@ body{
   width: 150px;
   cursor: default;
 }
+.my-action{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.opacity-5{
+  opacity: .5 !important;
+}

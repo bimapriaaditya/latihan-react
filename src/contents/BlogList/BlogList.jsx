@@ -9,10 +9,17 @@ class BlogList extends Component
     postForm: {
       id: '',
       product: '',
-      price: '10.000',
+      price: '',
       stock: '',
       description: ''
-    }
+    },
+    statusForm: 'create'
+  }
+
+  // Fetch data from API
+  componentDidMount()
+  {
+    this.getApi();
   }
 
   getApi = () => {
@@ -23,12 +30,6 @@ class BlogList extends Component
         post: json
       });
     });
-  }
-
-  // Fetch data from API
-  componentDidMount()
-  {
-    this.getApi();
   }
 
   // Delete data from API
@@ -50,7 +51,10 @@ class BlogList extends Component
     let {postForm} = this.state;
     
     postForm[e.target.name] = e.target.value;
-    postForm.id = Date.now();
+
+    if(this.state.statusForm === 'create') {
+      postForm.id = Date.now();
+    }
 
     this.setState({
       postForm
@@ -58,9 +62,31 @@ class BlogList extends Component
 
   }
 
-  // save data to API
-  savePost = (e) => {
+  // empty form
+  emptyForm = () => {
+    this.setState({
+      postForm: {
+        id: '',
+        product: '',
+        price: '',
+        stock: '',
+        description: ''
+      }
+    })
+  }
 
+  // hadle post
+  handlePost = (e) => {
+    if(this.state.statusForm === 'create'){
+      this.postData();
+    } else {
+      this.putData();
+    }
+    
+  }
+
+  // function post data
+  postData = () => {
     fetch('http://localhost:3001/posts', {
       method: 'POST',
       headers: {
@@ -71,11 +97,35 @@ class BlogList extends Component
     .then(response => response.json())
     .then(json => {
       this.setState({
-        post: [...this.state.post, json].sort((a, b) => {
-          return b.id - a.id
-        })
+        post: [...this.state.post, json],
+        statusForm: 'create',
       });
     });
+    this.emptyForm();
+    this.getApi();
+  }
+
+  // function PUT API
+  handleUpdate = (data) => {
+    this.setState({
+      postForm: data,
+      statusForm: 'update'
+    });
+  }
+
+  // function PUT data
+  putData = () => {
+    const {postForm} = this.state;
+
+    fetch(`http://localhost:3001/posts/${this.state.postForm.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postForm)
+    })
+    .then(response => response.json());
+    this.emptyForm();
   }
 
   
@@ -110,7 +160,8 @@ class BlogList extends Component
                     this.state.post.map(map => {
                       return <PostCard key={map.id}
                         data={map}
-                        deleteData={this.deletePost} />
+                        deleteData={this.deletePost}
+                        updateData={this.handleUpdate} />
                     })
                   }
                 </div>
@@ -121,7 +172,7 @@ class BlogList extends Component
 
         {/* modal */}
         <div className="modal fade" id="modalCreate">
-          <div className="modal-dialog" role="document">
+          <div className="modal-dialog opacity-5" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">Create Item</h5>
@@ -133,25 +184,48 @@ class BlogList extends Component
                 <form>
                   <div className="form-group">
                     <label htmlFor="product">Product</label>
-                    <input type="text" className="form-control" id="product" name="product" onChange={this.getInputValue} placeholder="Enter title" />
+                    <input type="text" 
+                      className="form-control" 
+                      id="product" 
+                      name="product" 
+                      onChange={this.getInputValue} 
+                      placeholder="Enter title"
+                      value={this.state.postForm.product} />
                   </div>
                   <div className="form-group">
                     <label htmlFor="price">Price</label>
-                    <input type="number" className="form-control" id="price" name="price" onChange={this.getInputValue} placeholder="Enter Price" />
+                    <input type="number" 
+                      className="form-control" 
+                      id="price" 
+                      name="price" 
+                      onChange={this.getInputValue} 
+                      placeholder="Enter Price"
+                      value={this.state.postForm.price} />
                   </div>
                   <div className="form-group">
                     <label htmlFor="stock">Stock</label>
-                    <input type="number" className="form-control" id="stock" name="stock" onChange={this.getInputValue} placeholder="Enter Stock" />
+                    <input type="number" 
+                      className="form-control" 
+                      id="stock" 
+                      name="stock" 
+                      onChange={this.getInputValue} 
+                      placeholder="Enter Stock"
+                      value={this.state.postForm.stock} />
                   </div>
                   <div className="form-group">
                     <label htmlFor="description">Description</label>
-                    <textarea className="form-control" id="description" name="description" onChange={this.getInputValue} placeholder="Enter content"></textarea>
+                    <textarea className="form-control" 
+                      id="description" 
+                      name="description" 
+                      onChange={this.getInputValue} 
+                      placeholder="Enter content"
+                      value={this.state.postForm.description}></textarea>
                   </div>
                 </form>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary" onClick={this.savePost}>
+                <button type="button" className="btn btn-primary" onClick={this.handlePost}>
                   <span className="spinner-border spinner-border-sm spinner d-none"></span>
                   <span className="text">Save changes</span>
                 </button>
