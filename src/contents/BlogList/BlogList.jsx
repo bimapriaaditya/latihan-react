@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from "react";
 import '../../css/product.css';
 import PostCard from '../../components/BlogPos/PostCard';
+import $ from 'jquery';
 
 class BlogList extends Component 
 {
@@ -105,6 +106,8 @@ class BlogList extends Component
       postForm: data,
       statusForm: 'update'
     });
+    // open bootstrap modal
+    $('#modalCreate').modal('show');
   }
 
   // function PUT data
@@ -128,13 +131,21 @@ class BlogList extends Component
     });
   }
 
+  // dismis modal
+  handleDismis = () => {
+    this.emptyForm();
+    this.setState({
+      statusForm: 'create'
+    });
+  }
+
   
   render() {
     return (
       <Fragment>
         <section className="container mt-3">
           <div className="row justify-content-center">
-            <div className="col-md-6 col-sm-8">
+            <div className="col-xl-6 col-lg-8 col-md-10 col-sm-12">
               <nav className="my-navbar border-bottom border-success px-4 py-2">
                 <div className="nav-left">
                   <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpngimg.com%2Fuploads%2Fnike%2Fnike_PNG5.png&f=1&nofb=1" alt="nike-logo" width="75px"/>
@@ -176,7 +187,7 @@ class BlogList extends Component
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">Create Item</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={this.handleDismis}>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
@@ -224,7 +235,7 @@ class BlogList extends Component
                 </form>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" className="btn btn-secondary" onClick={this.handleDismis} data-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-primary" onClick={this.handlePost}>
                   <span className="spinner-border spinner-border-sm spinner d-none"></span>
                   <span className="text">Save changes</span>
